@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"html/template"
 	"os"
@@ -9,7 +10,8 @@ import (
 )
 
 type dataSeries struct {
-	Data template.JS
+	Data  template.JS
+	Label template.JS
 }
 
 //go:generate go-bindata -o hdrhistogram.go ./hdrhistogram.template
@@ -20,6 +22,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	dsLabel := flag.String("label", "requests", "Label for the series in the generated chart")
+	flag.Parse()
+
 	if fi.Mode()&os.ModeNamedPipe != 0 {
 		str := ""
 		scanner := bufio.NewScanner(os.Stdin)
@@ -31,7 +37,8 @@ func main() {
 			var s string
 			s = re.FindStringSubmatch(str)[1]
 			ds := dataSeries{
-				Data: template.JS(s),
+				Data:  template.JS(s),
+				Label: template.JS(*dsLabel),
 			}
 
 			asset, err := Asset("hdrhistogram.template")
@@ -47,6 +54,6 @@ func main() {
 			}
 		}
 	} else {
-		fmt.Println("wrk-report usage:\n  $ wrk -t2 -c5 -d3s http://myService | wrk-report")
+		fmt.Println("wrk-report usage:\n  $ wrk -t2 -c5 -d3s http://myService | wrk-report [--label XYZ]")
 	}
 }

@@ -164,7 +164,7 @@
                 width: 800,
                 height: 480,
                 hAxis: {title: 'Percentile', minValue: 0, logScale: true, ticks: ticks},
-                vAxis: {title: 'Latency (µs)', minValue: 0},
+                vAxis: {title: 'Latency (ms)', minValue: 0},
                 legend: {position: 'bottom'}
             };
 
@@ -184,7 +184,7 @@
                             var percentile = 100.0 - (100.0 / dt.getValue(row, 0));
                             return dt.getColumnLabel(j) + ': ' +
                                 percentile.toPrecision(6) +
-                                '\%\'ile = ' + dt.getValue(row, j) + ' usec'
+                                '\%\'ile = ' + dt.getValue(row, j) + ' ms'
                         }
                     })(i)
                 });
@@ -246,7 +246,8 @@
 
         function auto() {
             let local_data = `{{.Data}}`;
-            dataSeries_g = appendDataSeries(local_data, "local", dataSeries_g);
+            let label = `{{.Label}}`;
+            dataSeries_g = appendDataSeries(local_data, label, dataSeries_g);
             drawChart();
         }
 
