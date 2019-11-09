@@ -51,5 +51,17 @@ docker run --rm -e FILENAME=report.html -v `pwd`:/data jgsqware/wrk-report:lates
 docker run --rm -e FILENAME=report.html -v `pwd`:/data jgsqware/wrk-report:latest bash -c 'wrk -t2 -c5 -d3s --timeout 2s -R100 --latency http://myService | wrk-report > /data/$FILENAME'
 ```
 
+## Building
+
+```
+make
+```
+
+If you change the HTML template, you need go-bindata to be able to generate a new hdrhistogram.go.
+
+```
+go get -u github.com/a-urth/go-bindata/...
+```
+
 ## Upcoming
 - Parsing wrk result and generate report
